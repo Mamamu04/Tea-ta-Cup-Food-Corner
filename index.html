@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6b4a00">
+  <meta name="description" content="Discover milk tea, coffee, snacks, and rice meals at Tea-Ta Cup Food Corner.">
+  <title>Tea-Ta Cup Food Corner | Your Everyday Cravings</title>
+  <style>
+    :root {
+      --brown: #593b08;
+      --brown-2: #765313;
+      --gold: #c79a3b;
+      --cream: #fff9ec;
+      --cream-2: #f6ecd6;
+      --ink: #332713;
+      --muted: #78684d;
+      --white: #fff;
+      --shadow: 0 14px 35px rgba(67, 45, 8, .11);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(1120px, calc(100% - 40px)); margin: auto; }
+
+    /* Navigation */
+    .navbar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,249,236,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(89,59,8,.12);
+    }
+    .nav-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; color: var(--brown); letter-spacing: .3px; }
+    .brand-mark { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--brown); color: var(--cream); font-size: 22px; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; font-size: 14px; font-weight: 700; color: var(--brown); }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-order, .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 0; border-radius: 999px; background: var(--brown); color: white;
+      padding: 12px 21px; font-weight: 800; cursor: pointer; transition: .2s ease;
+    }
+    .nav-order:hover, .btn:hover { background: var(--brown-2); transform: translateY(-2px); }
+    .menu-toggle { display: none; border: 0; background: transparent; color: var(--brown); font-size: 27px; cursor: pointer; }
+
+    /* Hero */
+    .hero { padding: 66px 0 54px; overflow: hidden; }
+    .hero-panel {
+      position: relative; isolation: isolate; min-height: 430px; border-radius: 32px;
+      background: linear-gradient(115deg, rgba(48,31,4,.94), rgba(89,59,8,.82)),
+                  url("milktea.jpg") center/cover;
+      color: var(--cream); display: flex; align-items: center; padding: clamp(30px, 7vw, 78px);
+      box-shadow: var(--shadow);
+    }
+    .hero-panel::after {
+      content: "🧋"; position: absolute; z-index: -1; right: 7%; bottom: -45px;
+      font-size: clamp(150px, 28vw, 300px); opacity: .16; transform: rotate(-12deg);
+    }
+    .eyebrow { text-transform: uppercase; letter-spacing: 3px; font-size: 12px; font-weight: 800; color: #e9c77d; }
+    .hero h1 { max-width: 650px; font-size: clamp(42px, 7vw, 76px); line-height: 1.02; margin: 14px 0 18px; letter-spacing: -2px; }
+    .hero h1 span { color: #f0cf83; }
+    .hero-copy { max-width: 530px; color: #f4e8ce; font-size: 17px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn-light { background: var(--cream); color: var(--brown); }
+    .btn-light:hover { background: white; }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 25px; }
+    .service-tags span { border: 1px solid rgba(255,255,255,.35); padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+
+    section { padding: 48px 0; }
+    .page { display: none; min-height: 65vh; }
+    .page.active { display: block; }
+    .nav-links a[aria-current='page'] { color: var(--gold); }
+
+    .section-heading { text-align: center; margin-bottom: 26px; }
+    .section-heading .eyebrow { color: var(--gold); }
+    .section-heading h2 { color: var(--brown); font-size: clamp(30px, 4vw, 43px); line-height: 1.15; margin: 8px 0; }
+    .section-heading p { max-width: 620px; margin: auto; color: var(--muted); font-size: 15px; }
+
+    /* About strip */
+    .intro { text-align: center; max-width: 780px; margin: 0 auto; color: var(--muted); font-size: 17px; }
+    .intro strong { color: var(--brown); }
+    .feature-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 28px; }
+    .feature { background: white; border: 1px solid #efe2c7; border-radius: 18px; padding: 20px; text-align: center; }
+    .feature .icon { font-size: 27px; }
+    .feature b { display: block; color: var(--brown); margin: 5px 0 2px; }
+    .feature span { color: var(--muted); font-size: 13px; }
+
+    /* Menu */
+    .menu-section { background: #f8f0df; }
+    .menu-tools { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 25px 0; }
+    .search-wrap { position: relative; width: min(330px, 100%); }
+    .search-wrap input { width: 100%; border: 1px solid #e3d2ae; border-radius: 999px; padding: 12px 18px 12px 42px; outline: none; background: white; color: var(--ink); }
+    .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(199,154,59,.15); }
+    .search-icon { position: absolute; left: 16px; top: 9px; color: var(--muted); }
+    .filter-btn { border: 1px solid #d9c69f; background: white; color: var(--brown); padding: 10px 17px; border-radius: 999px; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .filter-btn.active, .filter-btn:hover { background: var(--brown); color: white; border-color: var(--brown); }
+    .menu-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 17px; }
+    .menu-card { background: white; border-radius: 19px; overflow: hidden; border: 1px solid #eee2ca; box-shadow: 0 7px 18px rgba(67,45,8,.05); transition: .22s ease; }
+    .menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .menu-photo { height: 150px; background: var(--cream-2); overflow: hidden; }
+    .menu-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+    .menu-card:hover .menu-photo img { transform: scale(1.06); }
+    .menu-info { padding: 14px; }
+    .menu-info h3 { color: var(--brown); font-size: 16px; }
+    .menu-info p { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .menu-card[hidden] { display: none; }
+    .no-results { display: none; text-align: center; color: var(--muted); padding: 25px; }
+
+    /* Ordering steps */
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; counter-reset: step; }
+    .step { background: white; border: 1px solid #efe2c7; border-radius: 18px; padding: 22px 18px; text-align: center; }
+    .step-number { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--brown); color: white; font-weight: 900; margin: 0 auto 12px; }
+    .step h3 { color: var(--brown); font-size: 16px; margin-bottom: 5px; }
+    .step p { color: var(--muted); font-size: 13px; }
+
+    /* Contact */
+    .contact-panel { background: var(--brown); color: var(--cream); border-radius: 28px; padding: clamp(28px,5vw,52px); display: grid; grid-template-columns: 1.2fr .8fr; gap: 25px; align-items: center; }
+    .contact-panel h2 { font-size: clamp(28px,4vw,40px); line-height: 1.15; margin: 8px 0 12px; }
+    .contact-panel p { color: #e8d9b8; }
+    .contact-details { display: grid; gap: 12px; }
+    .contact-detail { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 13px 16px; }
+    .contact-detail small { display: block; color: #e8c879; font-size: 10px; letter-spacing: 1.5px; font-weight: 800; }
+    .contact-detail strong { overflow-wrap: anywhere; }
+
+    footer { padding: 30px 0; color: var(--muted); font-size: 13px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+    .footer-brand { color: var(--brown); font-weight: 900; }
+    .back-top { position: fixed; right: 18px; bottom: 18px; z-index: 40; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--brown); color: white; font-size: 20px; cursor: pointer; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s; }
+    .back-top.show { opacity: 1; pointer-events: auto; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .menu-grid { grid-template-columns: repeat(3,1fr); }
+      .steps { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 650px) {
+      .container { width: min(100% - 28px, 1120px); }
+      .nav-inner { min-height: 66px; }
+      .menu-toggle { display: block; }
+      .nav-order { display: none; }
+      .nav-links { display: none; position: absolute; left: 0; right: 0; top: 66px; background: var(--cream); padding: 18px 24px 22px; border-bottom: 1px solid #eadfc8; flex-direction: column; align-items: stretch; gap: 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 11px 0; }
+      .hero { padding: 25px 0 30px; }
+      .hero-panel { min-height: 440px; border-radius: 24px; padding: 30px 23px; }
+      .hero h1 { letter-spacing: -1px; }
+      .hero-copy { font-size: 15px; }
+      section { padding: 38px 0; }
+      .feature-row { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+      .menu-photo { height: 125px; }
+      .menu-info { padding: 11px; }
+      .steps { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .step { padding: 17px 11px; }
+      .contact-panel { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" data-page="home" aria-label="Tea-Ta Cup home">
+        <span class="brand-mark"><img src="logo.jpg"></span>
+        <span>TEA-TA CUP<small>FOOD CORNER</small></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-page="home" aria-current="page">Home</a></li>
+        <li><a href="#products" data-page="products">Products</a></li>
+        <li><a href="#contact" data-page="contact">Contact</a></li>
+      </ul>
+      <a class="nav-order" href="#contact" data-page="contact">☎ Order Now</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page active" id="page-home">
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-panel">
+          <div>
+            <div class="eyebrow">Good food. Good mood.</div>
+            <h1>Your Everyday <span>Cravings.</span></h1>
+            <p class="hero-copy">Welcome to Tea-Ta Cup Food Corner! Enjoy milk tea, coffee, refreshing drinks, snacks, and rice meals made for your everyday cravings.</p>
+            <div class="hero-actions">
+              <a class="btn btn-light" href="#products" data-page="products">Explore Our Products <span>→</span></a>
+              <a class="btn" href="#contact" data-page="contact">Contact to Order</a>
+            </div>
+            <div class="service-tags"><span>DINE IN</span><span>TAKE OUT</span><span>DELIVERY</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container reveal">
+        <div class="section-heading">
+          <div class="eyebrow">A little about us</div>
+          <h2>Welcome to Tea-Ta Cup!</h2>
+        </div>
+        <p class="intro"><strong>Tea-Ta Cup Food Corner</strong> is your go-to place for milk tea, coffee, snacks, and rice meals. Find something to enjoy, whether you're taking a quick break, sharing food with friends, or satisfying a craving.</p>
+        <div class="feature-row">
+          <div class="feature"><div class="icon">🧋</div><b>Drinks to Enjoy</b><span>Milk tea, coffee, and refreshing choices</span></div>
+          <div class="feature"><div class="icon">🍟</div><b>Snacks & Meals</b><span>Quick bites and filling favorites</span></div>
+          <div class="feature"><div class="icon">🤎</div><b>Easy Ordering</b><span>Contact us to ask about your order</span></div>
+        </div>
+      </div>
+    </section>
+
+    </div>
+
+    <div class="page" id="page-products">
+    <section class="menu-section" id="menu">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div class="eyebrow">Our products</div>
+          <h2>Explore Our Menu</h2>
+          <p>Find a drink, snack, or meal that fits your mood.</p>
+        </div>
+        <div class="menu-tools reveal">
+          <label class="search-wrap"><span class="search-icon">⌕</span><input id="menuSearch" type="search" placeholder="Search the menu..." aria-label="Search menu"></label>
+          <button class="filter-btn active" data-filter="all">All Items</button>
+          <button class="filter-btn" data-filter="drinks">Drinks</button>
+          <button class="filter-btn" data-filter="desserts">Desserts</button>
+          <button class="filter-btn" data-filter="food">Food</button>
+        </div>
+        <div class="menu-grid" id="menuGrid">
+          <article class="menu-card reveal" data-category="drinks" data-name="milk tea"><div class="menu-photo"><img src="milktea.jpg" alt="Milk tea" loading="lazy"></div><div class="menu-info"><h3>Milk Tea</h3><p>Classic &amp; flavored</p></div></article>
+          <article class="menu-card reveal" data-category="drinks" data-name="coffee"><div class="menu-photo"><img src="coffee.jpg" alt="Coffee" loading="lazy"></div><div class="menu-info"><h3>Coffee</h3><p>Hot &amp; iced</p></div></article>
+          <article class="menu-card reveal" data-category="drinks" data-name="soda series"><div class="menu-photo"><img src="soda.jpg" alt="Soda series" loading="lazy"></div><div class="menu-info"><h3>Soda Series</h3><p>Refreshing</p></div></article>
+          <article class="menu-card reveal" data-category="desserts" data-name="frappe"><div class="menu-photo"><img src="icecream.jpg" alt="Frappe" loading="lazy"></div><div class="menu-info"><h3>Frappe</h3><p>Creamy &amp; cold</p></div></article>
+          <article class="menu-card reveal" data-category="drinks" data-name="fruit tea"><div class="menu-photo"><img src="fruittea.jpg" alt="Fruit tea" loading="lazy"></div><div class="menu-info"><h3>Fruit Tea</h3><p>Fresh &amp; fruity</p></div></article>
+          <article class="menu-card reveal" data-category="desserts" data-name="ice cream"><div class="menu-photo"><img src="cream.jpg" alt="Ice cream" loading="lazy"></div><div class="menu-info"><h3>Ice Cream</h3><p>Sweet treat</p></div></article>
+          <article class="menu-card reveal" data-category="food" data-name="fries"><div class="menu-photo"><img src="fries.jpg" alt="French fries" loading="lazy"></div><div class="menu-info"><h3>Fries</h3><p>Crispy</p></div></article>
+          <article class="menu-card reveal" data-category="food" data-name="pizza"><div class="menu-photo"><img src="pizza.jpg" alt="Pizza" loading="lazy"></div><div class="menu-info"><h3>Pizza</h3><p>Cheesy</p></div></article>
+          <article class="menu-card reveal" data-category="food" data-name="siomai"><div class="menu-photo"><img src="siomai.jpg" alt="Siomai" loading="lazy"></div><div class="menu-info"><h3>Siomai</h3><p>Steamed</p></div></article>
+          <article class="menu-card reveal" data-category="food" data-name="rice meal"><div class="menu-photo"><img src="rice.jpg" alt="Rice meal" loading="lazy"></div><div class="menu-info"><h3>Rice Meal</h3><p>Filling meals</p></div></article>
+        </div>
+        <p class="no-results" id="noResults">No menu items found. Try another search.</p>
+      </div>
+    </section>
+
+    <section id="how-to-order">
+      <div class="container reveal">
+        <div class="section-heading">
+          <div class="eyebrow">Simple & convenient</div>
+          <h2>How to Order</h2>
+          <p>Follow these easy steps to get started with your order.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="step-number">1</div><h3>Choose Your Order</h3><p>Pick from our drinks, snacks, and meals.</p></div>
+          <div class="step"><div class="step-number">2</div><h3>Choose Your Option</h3><p>Dine in, take out, or ask about delivery.</p></div>
+          <div class="step"><div class="step-number">3</div><h3>Contact Us</h3><p>Call or message our Facebook page to order.</p></div>
+          <div class="step"><div class="step-number">4</div><h3>Enjoy!</h3><p>Wait for your order and enjoy your cravings.</p></div>
+        </div>
+      </div>
+    </section>
+
+    </div>
+
+    <div class="page" id="page-contact">
+    <section id="contact">
+      <div class="container">
+        <div class="contact-panel reveal">
+          <div>
+            <div class="eyebrow">We'd love to hear from you</div>
+            <h2>Ready for your next favorite?</h2>
+            <p>Have a question or want to place an order? Contact Tea-Ta Cup Food Corner through the details here.</p>
+            <div class="hero-actions">
+              <a class="btn btn-light" href="tel:09552395128">☎ 0955 239 5128</a><br><br>
+       
+              <button class="btn btn-light copy-link-btn" type="button" data-copy-link="https://www.facebook.com/profile.php?id=100088171303524">Copy Facebook Link</button>
+              <a class="btn btn-light" href="https://www.facebook.com/profile.php?id=100088171303524" target="_self" rel="noopener noreferrer">Facebook web link</a>
+            </div>
+          </div>
+          <div class="contact-details">
+            <div class="contact-detail"><small>ADDRESS</small><strong>Sapang Kawayan, Matictic, Norzagaray, Bulacan (in front of Sapang Kawayan Basketball Court)</strong><p style="margin-top:8px"><a href="https://maps.app.goo.gl/i3iao8wPb1g7dnxP7" target="_blank" rel="noopener noreferrer" style="color:#f0cf83;text-decoration:underline">Find Sapang Kawayan Basketball Court on Google Maps ↗</a>
+              <br><button class="copy-link-btn" type="button" data-copy-link="https://maps.app.goo.gl/i3iao8wPb1g7dnxP7" style="margin-top:8px;padding:8px 12px;border:0;border-radius:18px;background:#f0cf83;color:#3d2a12;font-weight:700">Copy Map Link</button>
+              <small id="copyStatus" aria-live="polite" style="display:block;margin-top:6px;color:#f0cf83"></small>
+              <a href="https://maps.google.com/?q=Sapang%20Kawayan%20Basketball%20Court%2C%20Matictic%2C%20Norzagaray%2C%20Bulacan%2C%20Philippines" target="_blank" rel="noopener noreferrer" style="color:#f0cf83;text-decoration:underline">Alternative map link ↗</a></p></div>
+            <div class="contact-detail"><small>CALL / TEXT</small><strong>0955 239 5128</strong></div>
+            <div class="contact-detail"><small>FACEBOOK</small><strong>Tea-Ta Cup Food Corner</strong></div>
+            <div class="contact-detail"><small>SERVICE OPTIONS</small><strong>Dine In • Take Out • Delivery</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><div class="footer-brand">TEA-TA CUP FOOD CORNER</div><span>Your Everyday Cravings</span></div>
+      <div>© <span id="year"></span> Tea-Ta Cup Food Corner. All rights reserved.</div>
+    </div>
+  </footer>
+  <button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+  <script>
+    // Page navigation: Home, Products, and Contact
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const pageLinks = document.querySelectorAll('[data-page]');
+    const pages = document.querySelectorAll('.page');
+
+    function showPage(pageName) {
+      pages.forEach(page => page.classList.toggle('active', page.id === `page-${pageName}`));
+      document.querySelectorAll('.nav-links a[data-page]').forEach(link => {
+        if (link.dataset.page === pageName) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.textContent = '☰';
+      const nextHash = pageName === 'home' ? '#home' : `#${pageName}`;
+      if (window.location.hash !== nextHash) history.replaceState(null, '', nextHash);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    pageLinks.forEach(link => {
+      link.addEventListener('click', event => {
+        const pageName = link.dataset.page;
+        if (!pageName) return;
+        event.preventDefault();
+        showPage(pageName);
+      });
+    });
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.textContent = isOpen ? '×' : '☰';
+    });
+
+    // Menu search and category filters
+    const searchInput = document.getElementById('menuSearch');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const menuCards = [...document.querySelectorAll('.menu-card')];
+    const noResults = document.getElementById('noResults');
+    let activeFilter = 'all';
+
+    function filterMenu() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+      menuCards.forEach(card => {
+        const matchesCategory = activeFilter === 'all' || card.dataset.category === activeFilter;
+        const matchesSearch = card.dataset.name.includes(query);
+        const show = matchesCategory && matchesSearch;
+        card.hidden = !show;
+        if (show) visibleCount++;
+      });
+      noResults.style.display = visibleCount ? 'none' : 'block';
+    }
+    searchInput.addEventListener('input', filterMenu);
+    filterButtons.forEach(button => button.addEventListener('click', () => {
+      activeFilter = button.dataset.filter;
+      filterButtons.forEach(item => item.classList.toggle('active', item === button));
+      filterMenu();
+    }));
+
+    // Reveal sections as they enter the screen
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+    } else {
+      document.querySelectorAll('.reveal').forEach(element => element.classList.add('visible'));
+    }
+
+
+    // Copy external links as a workaround for HTML preview apps that rewrite
+    // HTTPS links into unsupported fb:// or intent:// schemes.
+    async function copyTextFallback(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      field.setSelectionRange(0, field.value.length);
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (error) { copied = false; }
+      document.body.removeChild(field);
+      return copied;
+    }
+
+    document.querySelectorAll('[data-copy-link]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const status = document.getElementById('copyStatus');
+        try {
+          const copied = await copyTextFallback(button.dataset.copyLink);
+          if (status) status.textContent = copied
+            ? 'Link copied. Open Chrome and paste it into the address bar.'
+            : 'Copy was blocked. Long-press the link above and choose Copy link.';
+          button.textContent = copied ? 'Copied!' : 'Copy Link';
+        } catch (error) {
+          if (status) status.textContent = 'Copy was blocked. Long-press the link above and choose Copy link.';
+        }
+      });
+    });
+
+    // Back-to-top button and footer year
+    const backTop = document.getElementById('backTop');
+    window.addEventListener('scroll', () => backTop.classList.toggle('show', window.scrollY > 450), { passive: true });
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
